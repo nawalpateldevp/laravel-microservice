@@ -1,0 +1,36 @@
+name: Deploy to cPanel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Composer dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run tests
+        run: |
+          vendor/bin/phpunit --configuration phpunit.xml --testdox
+
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./
+          server-dir: /home/ywnzrlnr/alphardsoft.com/laravel-lumen
+          exclude: |
+            .git*
+            node_modules/**
+            vendor/**
+            tests/**
+            .github/**
+            .env.example
+            .env
