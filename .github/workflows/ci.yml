@@ -18,5 +18,4 @@ jobs:
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
           cp .env.example .env
-          php artisan key:generate || true
           vendor\bin\phpunit --configuration phpunit.xml --testdox
