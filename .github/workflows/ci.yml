@@ -14,9 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer
+
       - name: Run tests
         run: |
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          cp .env.example .env
-          php artisan key:generate || true
-          vendor\bin\phpunit --configuration phpunit.xml --testdox
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            cp .env.example .env
+            vendor/bin/phpunit --configuration phpunit.xml --testdox
